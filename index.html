@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EOB Doesn't Match Your Bill? Line It Up in Minutes | Medical Bill Mismatch Tracker</title>
+<meta name="description" content="Stop guessing whether you actually owe that bill. Line your medical bill up against your EOB, get the mismatch flagged automatically, and know exactly what to say when you call to dispute it. $7.99, one-time, Google Sheets or Excel.">
+<link rel="canonical" href="https://guthriekenosha.github.io/ledgerandletter-landing/">
+<meta property="og:title" content="EOB Doesn't Match Your Bill? Line It Up in Minutes.">
+<meta property="og:description" content="Flag the mismatch between your medical bill and your EOB automatically, and get a word-for-word script for the call to dispute it. $7.99, one-time purchase.">
+<meta property="og:type" content="website">
+<meta name="robots" content="index, follow">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "My EOB doesn't match my bill — is that normal?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It's common, and it doesn't automatically mean you owe the higher number. Your insurer sends the EOB and the provider sends the bill separately, often on different timelines, and it's easy for the two to be out of sync — because of a processing delay, a coding issue, or a genuine billing error. The fix isn't to guess; it's to put both documents side by side, line by line, and see exactly where they diverge before you pay or dispute anything."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What's the difference between a medical bill and an EOB?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The bill comes from your provider and shows what they're asking you to pay. The EOB (Explanation of Benefits) comes from your insurance company and shows how they processed the claim — the billed amount, what your plan's contract allows, what insurance paid, and what they say you actually owe. The EOB is not a bill itself; it's the record of what your insurer decided. When your patient responsibility on the EOB is lower than what the bill is asking for, that gap is exactly what this tool flags."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "The hospital didn't give me an itemized bill — what do I do?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Ask for one before you do anything else. A summary bill just shows a total; an itemized bill breaks that total down by every service, code, and charge, which is what you actually need to compare against your EOB line by line. You're entitled to request it — call the billing office directly and ask for an itemized statement, not just a balance due."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What if this was a surprise bill, an ER visit, or an out-of-network provider at an in-network facility?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "If you were treated in an emergency room, or by an out-of-network provider at a facility that's otherwise in-network, the federal No Surprises Act may limit what you can be balance-billed for. It doesn't cover every situation, but it's worth knowing before you pay — the No Surprises Help Desk (1-800-985-3059) can tell you whether your specific bill qualifies. Confirm current details directly, since program specifics can change."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What do I actually say when I call to dispute it?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "This is the part most tools skip. Knowing there's a mismatch isn't the same as knowing how to get it fixed, which is why the Medical Bill Mismatch Tracker includes a full phone dispute script — not a generic template, a word-for-word guide for the actual call: what to ask the billing supervisor, what documentation to reference, and how to follow up if the first call doesn't resolve it."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I know if it's a billing error or something I actually owe?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Common causes of a mismatch include duplicate charges, a service billed at the wrong code, a claim that hasn't fully finished processing yet, or a provider billing before the insurance payment posted. None of these mean you're wrong to question it. The starting rule is simple: if the bill is asking for more than your EOB's stated patient responsibility, that gap is worth a specific question to the billing office, not an assumption that you owe it."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "My claim was denied, not just mismatched — can this help?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Not directly, and it's worth being upfront about that rather than overselling it. This tool is built for a bill that doesn't match what your EOB says you owe — a reconciliation problem. A denied claim is a different situation: your insurer decided not to cover the service at all, which involves an appeals process rather than a line-item comparison. If your claim was denied outright, look for insurance-appeal resources built specifically for that process instead."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does this work for tracking multiple bills, not just one?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes — it's built to hold more than one claim at a time, which matters if you're managing an ongoing course of treatment, a hospital stay with several providers billing separately, or bills on behalf of a family member. One real example: four claims, $6,840 billed in total, $4,110 actually owed per the EOBs — $2,730 flagged automatically across the set rather than caught one bill at a time."
+      }
+    }
+  ]
+}
+</script>
+
+<style>
+  :root {
+    --navy: #0f3b52;
+    --teal: #1b7a8c;
+    --gold: #ffce54;
+    --ink: #122f38;
+    --muted: #4f7482;
+    --paper: #ffffff;
+    --bg: #f4f8f9;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: 'Source Sans 3', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    color: var(--ink);
+    background: var(--bg);
+    line-height: 1.55;
+  }
+  a { color: inherit; }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 24px; }
+
+  header.hero {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--teal) 100%);
+    color: #fff;
+    padding: 72px 0 64px;
+    text-align: center;
+  }
+  header.hero h1 {
+    font-size: clamp(28px, 4.4vw, 44px);
+    line-height: 1.2;
+    font-weight: 800;
+    margin: 0 0 20px;
+  }
+  header.hero h1 span { color: var(--gold); }
+  header.hero p.sub {
+    font-size: 19px;
+    max-width: 640px;
+    margin: 0 auto 32px;
+    color: rgba(255,255,255,0.9);
+  }
+  .cta-row { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+  .btn {
+    display: inline-block;
+    padding: 15px 30px;
+    border-radius: 999px;
+    font-weight: 700;
+    text-decoration: none;
+    font-size: 16px;
+  }
+  .btn-primary { background: var(--gold); color: var(--ink); }
+  .btn-secondary { background: transparent; color: #fff; border: 2px solid rgba(255,255,255,0.6); }
+  .price-note { margin-top: 18px; font-size: 14px; color: rgba(255,255,255,0.75); }
+
+  main section { padding: 56px 0; }
+  main section.alt { background: var(--paper); }
+  h2 {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--navy);
+    margin: 0 0 28px;
+    text-align: center;
+  }
+
+  .proof-card {
+    background: var(--paper);
+    border: 1px solid #e1eaec;
+    border-radius: 16px;
+    padding: 28px 32px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .proof-card .label { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); font-weight: 700; }
+  .proof-card .num { font-size: 36px; font-weight: 800; color: var(--navy); }
+  .proof-card .flag { color: #c23a3a; font-weight: 800; font-size: 20px; }
+
+  .steps { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+  .step { background: var(--paper); border-radius: 14px; padding: 24px; border: 1px solid #e1eaec; }
+  .step .n { display:inline-block; width: 32px; height: 32px; border-radius: 50%; background: var(--navy); color: #fff; text-align:center; line-height: 32px; font-weight: 800; margin-bottom: 12px; }
+  .step h3 { margin: 0 0 8px; font-size: 18px; }
+  .step p { margin: 0; color: var(--muted); font-size: 15px; }
+
+  .diff-box { background: var(--navy); color: #fff; border-radius: 16px; padding: 32px; }
+  .diff-box h3 { color: var(--gold); margin-top: 0; font-size: 20px; }
+  .diff-box p { color: rgba(255,255,255,0.9); margin-bottom: 0; }
+
+  .faq-item { border-bottom: 1px solid #e1eaec; padding: 22px 0; }
+  .faq-item:last-child { border-bottom: none; }
+  .faq-item h3 { margin: 0 0 8px; font-size: 18px; color: var(--navy); }
+  .faq-item p { margin: 0; color: var(--muted); }
+
+  footer {
+    background: var(--navy);
+    color: rgba(255,255,255,0.75);
+    text-align: center;
+    padding: 40px 0;
+    font-size: 14px;
+  }
+  footer a { color: var(--gold); text-decoration: none; font-weight: 600; }
+
+  .glossary-note { font-size: 14px; color: var(--muted); text-align: center; max-width: 640px; margin: 24px auto 0; }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <h1>Your EOB says one thing. The bill says <span>more</span>. Line them up in minutes.</h1>
+    <p class="sub">The Medical Bill Mismatch Tracker flags the exact gap between what your insurance says you owe and what the bill is asking for — then tells you exactly what to say when you call to dispute it.</p>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="https://kaygee0.gumroad.com/l/ubdlhav">Get it for $7.99</a>
+      <a class="btn btn-secondary" href="#how-it-works">See how it works</a>
+    </div>
+    <p class="price-note">One-time purchase. Google Sheets or Excel. No subscription, no account.</p>
+  </div>
+</header>
+
+<main>
+
+  <section id="proof">
+    <div class="wrap">
+      <h2>A real mismatch, caught in seconds</h2>
+      <div class="proof-card">
+        <div>
+          <div class="label">Billed</div>
+          <div class="num">$1,240.00</div>
+        </div>
+        <div>
+          <div class="label">EOB says you owe</div>
+          <div class="num">$310.00</div>
+        </div>
+        <div class="flag">$930 over — flagged</div>
+      </div>
+      <div class="proof-card">
+        <div>
+          <div class="label">Total billed (4 claims)</div>
+          <div class="num">$6,840.00</div>
+        </div>
+        <div>
+          <div class="label">You actually owe</div>
+          <div class="num">$4,110.00</div>
+        </div>
+        <div class="flag">$2,730 flagged</div>
+      </div>
+      <p class="glossary-note">Both examples are real bill-vs-EOB comparisons run through the tracker — not illustrative numbers.</p>
+    </div>
+  </section>
+
+  <section class="alt" id="how-it-works">
+    <div class="wrap">
+      <h2>How it works</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="n">1</div>
+          <h3>Enter the two numbers</h3>
+          <p>What the bill says you owe, and what your EOB's "patient responsibility" line says. No coding knowledge or file upload required.</p>
+        </div>
+        <div class="step">
+          <div class="n">2</div>
+          <h3>The mismatch gets flagged</h3>
+          <p>If the bill is asking for more than your EOB says you owe, it's flagged automatically — with the running totals kept for every claim you add.</p>
+        </div>
+        <div class="step">
+          <div class="n">3</div>
+          <h3>You get the exact script</h3>
+          <p>A full phone dispute script guide — what to say, who to ask for, and what to reference — so you're not improvising the call.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="different">
+    <div class="wrap">
+      <h2>Why not just use a free bill checker?</h2>
+      <div class="diff-box">
+        <h3>It compares your bill to your actual EOB — not a generic benchmark</h3>
+        <p>Some free tools check a bill's codes against typical Medicare pricing, which can catch a coding problem but can't tell you whether the bill matches what <em>your specific insurer</em> already agreed to pay. This tool works directly from your own EOB, and it doesn't stop at "something looks off" — it hands you the actual words to use on the phone call, in a simple spreadsheet you fill in yourself, with nothing to upload and nothing stored anywhere but your own computer.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="alt" id="faq">
+    <div class="wrap">
+      <h2>Frequently asked questions</h2>
+
+      <div class="faq-item">
+        <h3>My EOB doesn't match my bill — is that normal?</h3>
+        <p>It's common, and it doesn't automatically mean you owe the higher number. Your insurer sends the EOB and the provider sends the bill separately, often on different timelines, and it's easy for the two to be out of sync — because of a processing delay, a coding issue, or a genuine billing error. The fix isn't to guess; it's to put both documents side by side, line by line, and see exactly where they diverge before you pay or dispute anything.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3>What's the difference between a medical bill and an EOB?</h3>
+        <p>The bill comes from your provider and shows what they're asking you to pay. The EOB (Explanation of Benefits) comes from your insurance company and shows how they processed the claim — the billed amount, what your plan's contract allows, what insurance paid, and what they say you actually owe. The EOB is not a bill itself; it's the record of what your insurer decided. When your patient responsibility on the EOB is lower than what the bill is asking for, that gap is exactly what this tool flags.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3>The hospital didn't give me an itemized bill — what do I do?</h3>
+        <p>Ask for one before you do anything else. A summary bill just shows a total; an itemized bill breaks that total down by every service, code, and charge, which is what you actually need to compare against your EOB line by line. You're entitled to request it — call the billing office directly and ask for an itemized statement, not just a balance due.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3>What if this was a surprise bill, an ER visit, or an out-of-network provider at an in-network facility?</h3>
+        <p>If you were treated in an emergency room, or by an out-of-network provider at a facility that's otherwise in-network, the federal No Surprises Act may limit what you can be balance-billed for. It doesn't cover every situation, but it's worth knowing before you pay — the No Surprises Help Desk (1-800-985-3059) can tell you whether your specific bill qualifies. Confirm current details directly, since program specifics can change.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3>What do I actually say when I call to dispute it?</h3>
+        <p>This is the part most tools skip. Knowing there's a mismatch isn't the same as knowing how to get it fixed, which is why the Medical Bill Mismatch Tracker includes a full phone dispute script — not a generic template, a word-for-word guide for the actual call: what to ask the billing supervisor, what documentation to reference, and how to follow up if the first call doesn't resolve it.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3>How do I know if it's a billing error or something I actually owe?</h3>
+        <p>Common causes of a mismatch include duplicate charges, a service billed at the wrong code, a claim that hasn't fully finished processing yet, or a provider billing before the insurance payment posted. None of these mean you're wrong to question it. The starting rule is simple: if the bill is asking for more than your EOB's stated patient responsibility, that gap is worth a specific question to the billing office, not an assumption that you owe it.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3>My claim was denied, not just mismatched — can this help?</h3>
+        <p>Not directly, and it's worth being upfront about that rather than overselling it. This tool is built for a bill that doesn't match what your EOB says you owe — a reconciliation problem. A denied claim is a different situation: your insurer decided not to cover the service at all, which involves an appeals process rather than a line-item comparison. If your claim was denied outright, look for insurance-appeal resources built specifically for that process instead.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3>Does this work for tracking multiple bills, not just one?</h3>
+        <p>Yes — it's built to hold more than one claim at a time, which matters if you're managing an ongoing course of treatment, a hospital stay with several providers billing separately, or bills on behalf of a family member. One real example: four claims, $6,840 billed in total, $4,110 actually owed per the EOBs — $2,730 flagged automatically across the set rather than caught one bill at a time.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="final-cta">
+    <div class="wrap" style="text-align:center;">
+      <h2>Stop guessing whether you actually owe that bill</h2>
+      <div class="cta-row">
+        <a class="btn btn-primary" style="background:var(--navy); color:#fff;" href="https://kaygee0.gumroad.com/l/ubdlhav">Get the Medical Bill Mismatch Tracker — $7.99</a>
+      </div>
+      <p class="glossary-note">Google Sheets or Excel. Instant download. One-time purchase, yours forever.</p>
+      <!-- Add once approved and live: <p><a href="YOUTUBE-LINK-HERE">Watch the 30-second walkthrough</a></p> -->
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    LedgerAndLetter — the Medical Bill Mismatch Tracker + Dispute Script Guide.
+    <br>
+    <a href="https://kaygee0.gumroad.com/l/ubdlhav">Get it on Gumroad</a>
+  </div>
+</footer>
+
+</body>
+</html>
